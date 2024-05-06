@@ -2,6 +2,8 @@ import tkinter as tk
 from tkinter import messagebox
 from functools import partial
 import sqlite3
+import csv
+from openpyxl import Workbook
 
 
 class RecipeDatabase:
@@ -42,8 +44,28 @@ class RecipeDatabase:
         # Execute SELECT statement to retrieve all recipes
         self.c.execute("SELECT * FROM recipes")
         recipes = self.c.fetchall()
+        print(recipes)
 
-        return recipes
+        # Write recipes to CSV file
+        with open('recipes.csv', 'w', newline='') as csvfile:
+            fieldnames = ['id', 'title', 'ingredients', 'instructions']
+            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+
+            writer.writeheader()
+            for recipe in recipes:
+                writer.writerow({'id': recipe[0], 'title': recipe[1], 'ingredients': recipe[2], 'instructions': recipe[3]})
+
+        print("All recipes saved to recipes.csv")
+        
+        # Write recipes to Excel file
+        wb = Workbook()
+        ws = wb.active
+        ws.append(['id', 'title', 'ingredients', 'instructions'])
+        for recipe in recipes:
+            ws.append(recipe)
+        
+        wb.save('recipes.xlsx')
+        print("All recipes saved to recipes.xlsx")
     
     def delete_all_recipes(self):
         # Delete all rows from the recipes table

@@ -31,14 +31,3 @@ class RecipeScraper:
             print("Failed to fetch the page:", self.url)
             return None
         
-    def save_to_csv(self, filename):
-        recipe_data = self.scrape()
-        if recipe_data:
-            with open(filename, 'w', newline='', encoding='utf-8') as csvfile:
-                writer = csv.writer(csvfile)
-                writer.writerow(['Title', 'Ingredients', 'Instructions'])
-                writer.writerow([recipe_data['title'], '\n'.join(recipe_data['ingredients']), '\n'.join(recipe_data['instructions'])])
-            print(f"Recipe data saved to {filename}")
-        else:
-            print("No data to save.")
-        
