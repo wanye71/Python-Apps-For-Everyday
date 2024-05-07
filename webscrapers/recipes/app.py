@@ -37,7 +37,8 @@ def select_all_rows():
 def main():
     root = tk.Tk()
     root.title("Recipe Scraper GUI")
-    root.geometry("400x300")
+    root.geometry("200x200")
+    custom_font = ("Arial", 13)
 
     url_label = tk.Label(root, text="Enter Recipe URL:")
     url_label.pack()
@@ -45,10 +46,12 @@ def main():
     url_entry = tk.Entry(root)
     url_entry.pack()
 
-    insert_button = tk.Button(root, text="Insert Recipe", command=partial(insert_recipe, url_entry))
+    insert_button = tk.Button(root, text="Insert Recipe", width=15, font=custom_font,
+                              command=partial(insert_recipe, url_entry))
     insert_button.pack()
     
-    select_button = tk.Button(root, text="Select All Rows", command=select_all_rows)
+    select_button = tk.Button(root, text="Select All Rows", width=15, font=custom_font,
+                              command=select_all_rows)
     select_button.pack()
 
     root.mainloop()
