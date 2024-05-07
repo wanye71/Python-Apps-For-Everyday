@@ -26,8 +26,11 @@ class UI:
                 instructions = '\n'.join(recipe_data['instructions'])
 
                 db_ops = DatabaseOperations('recipes.db')
+            if not db_ops.recipe_exists(title):
                 db_ops.insert_row('soups', title, ingredients, instructions)  # assuming 'soups' is the table name
                 messagebox.showinfo("Success", "Recipe inserted successfully!")
+            else:
+                messagebox.showinfo("Duplicate", "This recipe already exists in the database.")
 
     def select_all_rows(self):
         db_ops = DatabaseOperations('recipes.db')
@@ -41,16 +44,16 @@ class UI:
         db_ops = DatabaseOperations('recipes.db')
         db_ops.delete_all_rows('soups')
         messagebox.showinfo("Rows Deleted", "All rows deleted successfully.")
-
+    
     def create_ui(self):
         root = tk.Tk()
         root.title("Recipe Scraper GUI")
-        root.geometry("600x400+1000+100")
+        root.geometry("+1000+100")
         custom_font = ("Arial", 13)
 
         # Frame for creating database
         db_frame = tk.Frame(root)
-        db_frame.pack(pady=10)
+        db_frame.grid(row=0, column=1, pady=10, padx=10, sticky="e")
 
         create_db_label = tk.Label(db_frame, text="Create Database:")
         create_db_label.grid(row=0, column=0, padx=5)
@@ -59,12 +62,12 @@ class UI:
         database_entry.grid(row=0, column=1, padx=5)
 
         create_db_button = tk.Button(db_frame, text="Create", font=custom_font,
-                                     command=partial(self.create_database, database_entry))
+                                    command=partial(self.create_database, database_entry))
         create_db_button.grid(row=0, column=2, padx=5)
 
         # Frame for inserting recipe URLs
         insert_frame = tk.Frame(root)
-        insert_frame.pack(pady=10)
+        insert_frame.grid(row=1, column=1, pady=10, padx=10, sticky="e")
 
         insert_url_label = tk.Label(insert_frame, text="Insert Recipe URL:")
         insert_url_label.grid(row=0, column=0, padx=5)
@@ -73,20 +76,23 @@ class UI:
         url_entry.grid(row=0, column=1, padx=5)
 
         insert_button = tk.Button(insert_frame, text="Insert", font=custom_font,
-                          command=lambda: self.insert_recipe(url_entry))
+                                command=lambda: self.insert_recipe(url_entry))
         insert_button.grid(row=0, column=2, padx=5)
 
         # Frame for buttons
         button_frame = tk.Frame(root)
-        button_frame.pack(pady=10)
+        button_frame.grid(row=2, column=1, pady=10, padx=10, sticky="e")
 
         select_button = tk.Button(button_frame, text="Select All Rows", font=custom_font,
-                                  command=self.select_all_rows)
+                                command=self.select_all_rows)
         select_button.grid(row=0, column=0, padx=5)
 
         delete_button = tk.Button(button_frame, text="Delete All Rows", font=custom_font,
-                                  command=self.delete_all_rows)
+                                command=self.delete_all_rows)
         delete_button.grid(row=0, column=1, padx=5)
 
         root.mainloop()
+
+
+
 # https://www.allrecipes.com/recipe/236187/german-potato-bacon-soup/

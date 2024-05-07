@@ -59,6 +59,23 @@ class DatabaseOperations:
         finally:
             self.close()
         print('data insert successful')
+        
+    def recipe_exists(self, title):
+        """
+        Check if a recipe with the given title already exists in the database.
+        :param title: Title of the recipe to check.
+        :return: True if the recipe exists, False otherwise.
+        """
+        self.connect()
+        try:
+            self.cur.execute('''SELECT COUNT(*) FROM soups WHERE title = ?''', (title,))
+            count = self.cur.fetchone()[0]
+            return count > 0
+        except sqlite3.Error as e:
+            print("Error checking if recipe exists:", e)
+            return False
+        finally:
+            self.close()
 
     def select_all_rows(self, table_name):
         self.connect()
